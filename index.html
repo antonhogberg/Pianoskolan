@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="sv">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Durskalor - Övning</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        .header {
+            background: url('piano-background.jpg') no-repeat center center/cover;
+            color: white;
+            padding: 20px;
+            position: relative;
+        }
+        .header h1, .header h2 {
+            margin: 5px;
+        }
+        .divider {
+            width: 100%;
+            height: 2px;
+            background-color: white;
+            margin: 10px 0;
+        }
+        .exercise-container {
+            background: #dff5f5;
+            padding: 20px;
+            margin: 20px;
+            border-radius: 10px;
+        }
+        .gallery-container {
+            width: 90vw;
+            max-width: 600px;
+            aspect-ratio: 16 / 9;
+            overflow: hidden;
+            margin: auto;
+            position: relative;
+        }
+        .gallery {
+            display: flex;
+            transition: transform 0.3s ease-in-out;
+        }
+        .gallery img {
+            width: 100%;
+            height: auto;
+            user-select: none;
+        }
+        .star-container {
+            margin-top: 10px;
+        }
+        .star {
+            width: 100px;
+            height: auto;
+            cursor: pointer;
+            transition: opacity 0.5s ease-in-out;
+        }
+        .video-link {
+            display: inline-block;
+            margin-top: 10px;
+        }
+        .chapter-code {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1><a href="kapitel.html" style="color: white; text-decoration: none;">Durskalor</a></h1>
+        <div class="divider"></div>
+        <h2><a href="underkapitel.html" style="color: white; text-decoration: none;">Del 1: Höger hand, #-tonarter</a></h2>
+    </div>
+
+    <div class="exercise-container">
+        <div class="gallery-container" id="gallery-container">
+            <div class="gallery" id="gallery">
+                <img src="image1.jpg" alt="Bild 1">
+                <img src="image2.jpg" alt="Bild 2">
+                <img src="image3.jpg" alt="Bild 3">
+                <img src="image4.jpg" alt="Bild 4">
+                <img src="image5.jpg" alt="Bild 5">
+                <img src="image6.jpg" alt="Bild 6">
+            </div>
+        </div>
+    </div>
+
+    <div class="star-container">
+        <img src="star1.png" id="star" class="star" onclick="nextStar()">
+    </div>
+
+    <a href="video-link.html" class="video-link">
+        <img src="play-button.png" alt="Play Video" width="80">
+    </a>
+
+    <div class="chapter-code">3:1:1</div>
+
+    <script>
+        // Swipe-funktion
+        let gallery = document.getElementById("gallery");
+        let galleryContainer = document.getElementById("gallery-container");
+        let startX = 0;
+        let currentIndex = 0;
+
+        galleryContainer.addEventListener("touchstart", function(event) {
+            startX = event.touches[0].clientX;
+        });
+
+        galleryContainer.addEventListener("touchmove", function(event) {
+            let moveX = event.touches[0].clientX;
+            let difference = startX - moveX;
+
+            if (difference > 50) {
+                nextImage();
+            } else if (difference < -50) {
+                prevImage();
+            }
+        });
+
+        function nextImage() {
+            if (currentIndex < gallery.children.length - 1) {
+                currentIndex++;
+                updateGallery();
+            }
+        }
+
+        function prevImage() {
+            if (currentIndex > 0) {
+                currentIndex--;
+                updateGallery();
+            }
+        }
+
+        function updateGallery() {
+            let newPosition = -currentIndex * 100 + "%";
+            gallery.style.transform = `translateX(${newPosition})`;
+        }
+
+        // Stjärna-funktion
+        let starLevel = localStorage.getItem("exercise-stars") || 1;
+
+        function updateStarImage() {
+            document.getElementById("star").src = `star${starLevel}.png`;
+        }
+
+        function nextStar() {
+            if (starLevel < 6) {
+                starLevel++;
+                localStorage.setItem("exercise-stars", starLevel);
+                updateStarImage();
+            }
+        }
+
+        window.onload = updateStarImage;
+    </script>
+</body>
+</html>
